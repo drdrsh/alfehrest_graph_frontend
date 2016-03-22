@@ -1,0 +1,27 @@
+{
+    "name": "alfehrest_graph_frontend",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/drdrsh/alfehrest_graph_frontend.git"
+    },
+    "author": "Mostafa Abdelraouf",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/drdrsh/alfehrest_graph_frontend/issues"
+    },
+    "devDependencies": {
+        "grunt": "^0.4.5",
+        "grunt-bowercopy": "^1.2.4",
+        "grunt-contrib-concat": "^1.0.0",
+        "grunt-contrib-jshint": "~1.0.0",
+        "grunt-contrib-uglify": "^0.11.0",
+        "grunt-expand-in-place": "^0.1.0",
+        "grunt-serve": "^0.1.6"
+    },
+    "homepage": "https://github.com/drdrsh/alfehrest_graph_frontend#readme"
+}
