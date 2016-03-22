@@ -1,7 +1,9 @@
 var cy = null;
 document.addEventListener('DOMContentLoaded', function(){
     prepareLayout();
-    getEntityData('tribe_4yxlMYJaLpg').then(renderNewItems);
+    getEntityData('tribe_4yxlMYJaLpg').then(function(data){
+        renderNewItems(null, data);
+    });
 });
 
 function onDoubleTap(event) {
@@ -9,20 +11,32 @@ function onDoubleTap(event) {
     if(d.loaded) {
         return;
     }
-    getEntityData(d.id).then(renderNewItems);
+    getEntityData(d.id).then(function(data){
+        renderNewItems(d.id, data)
+    });
 }
 
-function renderNewItems(data) {
-    console.log(data);
+function renderNewItems(nodeId, data) {
+
     var elements = [];
-    elements.push({
-        data: {
-            id: data.entity.id,
-            label: data.entity.name,
-            loaded: true
-        },
-        classes: 'center-center'
-    });
+
+    if(!nodeId) {
+        elements.push({
+            data: {
+                id: data.entity.id,
+                label: data.entity.name,
+                loaded: true
+            },
+            classes: 'center-center'
+        });
+    } else {
+        var elm = cy.getElementById(nodeId);
+        if(elm) {
+            elm._private.data.loaded = true;
+            console.log('loaded!');
+        }
+    }
+
 
     for (var idx in data.relationships) {
         for (var i = 0; i < data.relationships[idx].length; i++) {
