@@ -1,0 +1,29 @@
+# AlFehrest Graph Visualization Frontend
+
+A very basic graph client side for the [NodeJS AlFehrest Graph Server](https://github.com/drdrsh/alfehrest_nodejs)
+
+You will need to have [NodeJS](http://nodejs.org), [npm](http://npmjs.com), [grunt](http://gruntjs.com) and [bower](http://bower.io) installed for this to work. If you have all of those simply run the following
+
+
+```shell
+git clone https://github.com/drdrsh/alfehrest_graph_frontend.git .
+npm install
+grunt dev
+```
+
+And navigate to [http://localhost:9000/index.html](http://localhost:9000/index.html)
+
+You will also need to have the server up and running with sample data. For more details please
+refer to [NodeJS AlFehrest Graph Server](https://github.com/drdrsh/alfehrest_nodejs)
+
+If you configured the server to use a different url/port than the default, please update the config.js
+file at
+
+```shell
+./dev/assets/app/js/config.js
+```
+
+
+### Some background
+
+This demo is currently based on cytoscape and cola, I am still experimenting with graph libraries.
