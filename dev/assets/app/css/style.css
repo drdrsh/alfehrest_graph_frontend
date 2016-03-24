@@ -2,17 +2,17 @@ body {
 	font-family: helvetica, sans-serif;
 	font-size: 14px;
 }
-
-#cy {
-	position: absolute;
-	left: 0;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 999;
+.link {
+	stroke: #000;
+	stroke-width: 1.5px;
 }
 
-h1 {
-	opacity: 0.5;
-	font-size: 1em;
+.node {
+	fill: #000;
+	stroke: #fff;
+	stroke-width: 1.5px;
 }
+
+.node.a { fill: #1f77b4; }
+.node.b { fill: #ff7f0e; }
+.node.c { fill: #2ca02c; }

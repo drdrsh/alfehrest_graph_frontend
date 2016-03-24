@@ -7,22 +7,27 @@
 	<link rel="stylesheet" type="text/css" href="./assets/app/css/style.css" />
 </head>
 <body>
-
-	<h1>Labels demo</h1>
-	<div id="cy"></div>
-
 	<script type="text/javascript">var AlFehrestNS = {};</script>
 	<script type="text/javascript" src="./assets/lib/jquery/jquery.js"></script>
 	<script type="text/javascript" src="./assets/lib/jquery-ui/jquery-ui.js"></script>
+	<script type="text/javascript" src="./assets/lib/d3/d3.js"></script>
+	<!--
 	<script type="text/javascript" src="./assets/lib/cytoscape/cytoscape.js"></script>
 	<script type="text/javascript" src="./assets/lib/webcola/cola.v3.min.js"></script>
 	<script type="text/javascript" src="./assets/lib/cytoscape/cytoscape-cola.js"></script>
+	<script type="text/javascript" src="./assets/app/js/main-cyto.js"></script>
+	-->
 
+	<!-- expand_section ["assets/app/js/renderers/**/*.js"] -->
+	<script type="text/javascript" src="./assets/app/js/renderers/entity/basic.js"></script>
+	<script type="text/javascript" src="./assets/app/js/renderers/relation/basic.js"></script>
+	<!-- /expand_section -->
+
+	<script type="text/javascript" src="./assets/app/js/main-req.js"></script>
 	<script type="text/javascript" src="./assets/app/js/config.js"></script>
 	<script type="text/javascript" src="./assets/app/js/language.js"></script>
 	<script type="text/javascript" src="./assets/app/js/template.js"></script>
-	<script type="text/javascript" src="./assets/app/js/main-req.js"></script>
-	<script type="text/javascript" src="./assets/app/js/main-cyto.js"></script>
+	<script type="text/javascript" src="./assets/app/js/main-d3.js"></script>
 
 </body>
 </html>
