@@ -8,6 +8,11 @@ var linkIndex = {};
 var lineIndex = {};
 var isOverPrimative = false;
 
+function loadEntity(id) {
+    getEntityData(id).then(function(data){
+        renderNewItems(null, data);
+    });
+}
 document.addEventListener('DOMContentLoaded', function(){
     prepareLayout();
     getEntityData('tribe_4yxlMYJaLpg').then(function(data){
@@ -189,11 +194,18 @@ function update() {
     }
     rendererLibrary.Entities.Basic.update(svg, force, orphanNodes);
 
-}
+    svg.selectAll('.node.entity')
+    .on('click', function(d) {
+        if(!d.loaded) {
+            loadEntity(d.id);
+        }
+    });
 
+}
+var profiled = false;
 function tick()  {
     var rendererLibrary = AlFehrestNS.Renderers;
-
+    /*
     for(var entityType in nodeIndex) {
         var rendererName = entityType.substr(0, 1).toUpperCase() + entityType.substr(1);
         var renderer = rendererLibrary.Entities[rendererName] || rendererLibrary.Entities.Basic;
@@ -205,15 +217,24 @@ function tick()  {
         var renderer = rendererLibrary.Relations[relType] || rendererLibrary.Relations.Basic;
         renderer.tick(svg, force);
     }
+    */
+    if(!profiled) {
+        console.profile();
+    }
 
+    rendererLibrary.Entities.Basic.tick(svg, force);
+    rendererLibrary.Relations.Basic.tick(svg, force);
+
+    if(!profiled) {
+        console.profileEnd();
+        profiled = true;
+    }
 
 }
 
 function rescale() {
     var transform = " scale(" + d3.event.scale + ")";
-    if(!isOverPrimative) {
-        //transform += " translate(" + d3.event.translate + ")";
-    }
+    transform += " translate(" + d3.event.translate + ")";
     svg.selectAll('*').attr("transform", transform);
     update();
 }
@@ -225,8 +246,8 @@ function prepareLayout() {
 
     svg = d3.select("body").append("svg")
         .attr("width", width)
-        .attr("height", height);
-        //.call(d3.behavior.zoom().scaleExtent([0.1, 10]).on("zoom", rescale));
+        .attr("height", height)
+        .call(d3.behavior.zoom().scaleExtent([0.1, 10]).on("zoom", rescale));
 
     //entityNodes = svg.selectAll(".entity-node");
     //linkNodes   = svg.selectAll(".link-node");
@@ -236,7 +257,13 @@ function prepareLayout() {
         .nodes([])
         .links([])
         .charge(-900)
-        .linkDistance(function(d){return 140;})
+        .linkDistance(function(d){
+            if(d.loaded) {
+                return 200;
+            }  else {
+                return 500;
+            }
+        })
         .size([width, height])
         .on('tick', tick)
         .start();

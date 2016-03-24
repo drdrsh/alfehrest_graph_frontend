@@ -18,18 +18,18 @@ AlFehrestNS.Renderers.Entities.Basic = (function() {
                 .attr("cx", function(d) { return d.x; })
                 .attr("cy", function(d) { return d.y; })
                 .attr("class", "node entity " + className)
-                .attr("r", 30)
+                .attr("r", 50)
                 .style("fill", function(d) { return 'red'; })
                 .call(force.drag);
 
             var textNodes = svg.selectAll("text.entity." + className).data(nodes, function(d){ return "text_" + d.id; });
             textNodes.exit().remove();
             textNodes.enter().append("text")
-                .text( function (d) { return "HelloWorld"; })
+                .text( function (d) { return d.name || d.title })
                 .attr("font-family", "sans-serif")
                 .attr("class", "text entity " + className)
-                .attr("font-size", "20px")
-                .attr("fill", "black");
+                .attr("font-size", "18px")
+                .attr("fill", "white");
 
         },
 

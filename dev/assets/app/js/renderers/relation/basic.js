@@ -50,6 +50,7 @@ AlFehrestNS.Renderers.Relations.Basic = (function() {
                 .insert("line")
                 .attr("class", "link " + className);
 
+            /*
             var boxWidth = 50;
             var boxHeight= 50;
             var rNodes = svg.selectAll(".node.rel." + className).data(nodes, function(d){
@@ -64,7 +65,7 @@ AlFehrestNS.Renderers.Relations.Basic = (function() {
                 .attr("height", function(d) { return 10; })
                 .attr("class", "node rel " + className)
                 .style("fill", function(d) { return 'green'; });
-
+            */
             var textNodes = svg.selectAll("text").data(nodes, function(d){ return "text_" + d.id; });
             textNodes.exit().remove();
             textNodes.enter().append("text")
@@ -85,6 +86,7 @@ AlFehrestNS.Renderers.Relations.Basic = (function() {
                 .attr("x2", function(d) { return d.target.x; })
                 .attr("y2", function(d) { return d.target.y; });
 
+            /*
             svg.selectAll(".node.rel." + className)
                 .attr("x", function(d) {
                     var midline = d.source.x + ((d.target.x - d.source.x) / 2);
@@ -122,7 +124,7 @@ AlFehrestNS.Renderers.Relations.Basic = (function() {
                     var params = [a,  x + hw, y + hh];
                     return "rotate(" + params.join(',') + ")";
                 });
-
+                */
         }
     }
 })();
