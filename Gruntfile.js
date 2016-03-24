@@ -58,10 +58,10 @@ module.exports = function(grunt) {
                 },
                 files: {
                     "dev/assets/lib/jquery/jquery.js" : "./jquery/dist/jquery.js",
-                    "dev/assets/lib/cytoscape/cytoscape.js" : "./cytoscape/dist/cytoscape.js",
-                    "dev/assets/lib/cytoscape/cytoscape-cola.js" : "./cytoscape-cola/cytoscape-cola.js",
-                    "dev/assets/lib/webcola/cola.v3.min.js" : "./webcola/WebCola/cola.v3.min.js",
-                    "dev/assets/lib/d3/d3.js" : "./d3/d3.js",
+
+                    "dev/assets/lib/vis/vis.css" : "./vis/dist/vis.css",
+                    "dev/assets/lib/vis/vis.js" :  "./vis/dist/vis.js",
+                    "dev/assets/lib/vis/img/" :  "./vis/dist/img/**/*",
 
                     "dev/assets/lib/jquery-ui/jquery-ui.js" : "./jquery-ui/jquery-ui.js",
                     "dev/assets/lib/jquery-ui/jquery-ui.css" : "./jquery-ui/themes/start/jquery-ui.css",
