@@ -31,7 +31,9 @@ module.exports = function(grunt) {
                         'bower_components/jquery-ui/ui/draggable.js',
                         'bower_components/jquery-ui/ui/resizable.js',
                         'bower_components/jquery-ui/ui/button.js',
-                        'bower_components/jquery-ui/ui/dialog.js'
+                        'bower_components/jquery-ui/ui/dialog.js',
+                        'bower_components/jquery-ui/ui/menu.js',
+                        'bower_components/jquery-ui/ui/autocomplete.js'
                     ],
                     dest: 'bower_components/jquery-ui/jquery-ui.js'
                 }

@@ -9,6 +9,15 @@ function getEntityData(id) {
 
 }
 
+function getEntityList() {
+    var url1 = AlFehrestNS.cfg('url') + "tribe";
+    var url2 = AlFehrestNS.cfg('url') + "person";
+    return $.when(
+        $.ajax({url : url1, headers: { "Content-language": "ar" }}),
+        $.ajax({url : url2, headers: { "Content-language": "ar" }})
+    );
+}
+
 function getEntityDetails(id) {
 
     var parts = id.split('_');

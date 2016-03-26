@@ -2,6 +2,8 @@ var graph = null;
 var nodes = null;
 var edges = null;
 
+function _(str){return str;}
+
 function loadDetails(id) {
 
     $( "#details-dialog p" ).addClass("loading");
@@ -18,16 +20,45 @@ function loadDetails(id) {
 
 function loadEntity(id) {
     getEntityData(id).then(function(data){
-        renderNewItems(null, data);
+        renderNewItems(id, data);
     });
+}
+
+function onSearchItemSelected(item) {
+    clearNetwork();
+    loadEntity(item.id);
+}
+
+function clearNetwork() {
+    nodes.clear();
+    edges.clear();
 }
 
 document.addEventListener('DOMContentLoaded', function(){
     startup();
+    getEntityList().then(function(a, b){
+        var records = [];
+        var data = [];
+        records = records.concat(a[0]);
+        records = records.concat(b[0]);
+        for(var i=0; i<records.length; i++) {
+            data.push({
+                'id'    : records[i].id,
+                'label' : records[i].name,
+                'value' : records[i].name,
+                'type'  : records[i].entity_type,
+                'cb'    : onSearchItemSelected
+            });
+        }
+        $('.search input').blur(function(){
+            $(this).val("");
+        });
+        AlFehrestNS.SearchManager.attach($('.search input'));
+        AlFehrestNS.SearchManager.register(data);
+        
+    });
     loadEntity('tribe_4JkxGYypI6l');
     loadEntity('person_NJ0egMK1a86e');
-
-
 });
 
 function translate(str) {
@@ -168,6 +199,9 @@ function addNodes(data) {
             e.nodeType = 'entity';
             e.loaded = false;
             e.group = type;
+            if(id == 'person_NJ0egMK1a86e') {
+                e.group = 'prophet';
+            }
             e.label = e.name || e.title;
             e.title = e.name || e.title;
             try {
@@ -184,6 +218,9 @@ function renderNewItems(nodeId, data) {
     addNodes(data);
     addLinks(data);
     update();
+    if(nodeId) {
+        graph.focus(nodeId);
+    }
 }
 function image(name) {
     return './assets/app/images/' + name + '.png';
@@ -228,7 +265,10 @@ function startup() {
             },
             smooth: true
         },
-        interaction:{hover:true},
+        interaction:{
+            hover:true,
+            navigationButtons: true
+        },
         physics:{
             barnesHut:{gravitationalConstant:-30000},
             stabilization: {iterations:2500}
