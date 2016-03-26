@@ -21,17 +21,11 @@ $('#menu').click(function(){
 
 $( ".about" ).click(function() {
     $('#about-dialog').dialog('open');
-    appNS.helpEngine.close();
+    AlFehrestNS.HelpEngine.close();
 });
 
 $( ".help" ).click(function() {
-    if(!appNS.graph) {
-        shouldStartTour = true;
-        $('.build').click();
-    } else {
-        appNS.helpEngine.start();
-    }
-
+    AlFehrestNS.HelpEngine.start();
 });
 
 

@@ -6,14 +6,22 @@ function _(str){return str;}
 
 function loadDetails(id) {
 
-    $( "#details-dialog p" ).addClass("loading");
-    $( "#details-dialog" )
-        .dialog( "option", "title", nodes.get(id).name )
+    var $dlg = $("#details-dialog");
+    var $p   = $dlg.find("p").addClass("loading");
+    var $ol  = $dlg.find("ol").html('');
+
+    $dlg.find("h2").addClass("loading");
+    $dlg.dialog( "option", "title", nodes.get(id).name )
         .dialog( "open" );
     getEntityDetails(id).then(function(data) {
-        $( "#details-dialog p").removeClass("loading").html(
-            data.entity.description || data.entity.bio
+        $dlg.find("h2").removeClass("loading");
+        $p.removeClass("loading").html(
+            (data.entity.description || data.entity.bio).replace(/\n/ig, "<br>")
         );
+        for(var i=0; i<data.entity.references.length; i++) {
+            $ol.append("<li />").html(data.entity.references[i]);
+        }
+        $p.parent().scrollTop(0);
     });
 
 }
@@ -63,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 function translate(str) {
     var lookup = {
-        'tribe.sareeh': 'تابع صريح',
+        'tribe.sareeh': 'تابع',
         'tribe.root' : 'أصل'
     };
 
@@ -219,7 +227,7 @@ function renderNewItems(nodeId, data) {
     addLinks(data);
     update();
     if(nodeId) {
-        graph.focus(nodeId);
+        AlFehrestNS.Graph.focus(nodeId);
     }
 }
 function image(name) {
@@ -250,6 +258,8 @@ function startup() {
         nodes: nodes,
         edges: edges
     };
+    AlFehrestNS.data = data;
+
     var options = {
         nodes: {
             scaling: {
@@ -304,7 +314,7 @@ function startup() {
             }
         }
     };
-    graph = new vis.Network(container, data, options);
+    AlFehrestNS.Graph = graph = new vis.Network(container, data, options);
 
     var dblClickTimeout = null;
     graph.on('doubleClick', function(event) {
@@ -315,6 +325,7 @@ function startup() {
     });
     graph.on('hoverNode', function(event){
         document.body.style.cursor = "pointer";
+        console.log(event.node);
         //neighbourhoodHighlight(event.node);
     });
     graph.on('blurNode', function(event){

@@ -25,4 +25,5 @@ AlFehrestNS.activeLanguage = {
     "event.related": "متعلق بحدث ",
     "transcript.related": "متعلق بنص",
     "person.said_by": "قاله"
+
 };
