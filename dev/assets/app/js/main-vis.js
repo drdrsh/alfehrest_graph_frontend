@@ -40,13 +40,117 @@ function onSearchItemSelected(item) {
         });
         return;
     }
-    clearNetwork();
+    restartNetwork();
     loadEntity(item.id);
 }
 
-function clearNetwork() {
-    nodes.clear();
-    edges.clear();
+
+function restartNetwork() {
+    if(graph) {
+        graph.destroy();
+        nodes.clear();
+        edges.clear();
+    }
+    var container = document.getElementById('graph-container');
+
+    // create an array with nodes
+    nodes = new vis.DataSet();
+    edges = new vis.DataSet();
+
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    AlFehrestNS.data = data;
+
+    var options = {
+        nodes: {
+            scaling: {
+                min: 16,
+                max: 32
+            },
+            font: {
+                size: 16,
+                face: 'Droid Arabic Naskh',
+                strokeWidth: 1
+            }
+        },
+        edges: {
+            color: {
+                'color': '#aa0000',
+                'hover': '#00aa00',
+                'highlight': '#0000aa'
+            },
+            font: {
+                size: 15,
+                face: 'Droid Arabic Naskh'
+            },
+            smooth: true
+        },
+        interaction:{
+            hover:true,
+            navigationButtons: true
+        },
+        physics:{
+            barnesHut:{gravitationalConstant:-30000},
+            stabilization: {iterations:2500}
+        },
+        groups: {
+            tribe: {
+                shape: 'image',
+                image: image('tribe')
+            },
+            person: {
+                shape: 'image',
+                image: image('person')
+            },
+            prophet: {
+                shape: 'image',
+                image: image('prophet')
+            }
+        }
+    };
+    AlFehrestNS.Graph = graph = new vis.Network(container, data, options);
+
+    var dblClickTimeout = null;
+    graph.on('stabilized', function(event){
+        var hasSeenHelp = AlFehrestNS.LocalStorage.retrieve('SeenHelp');
+        if(!hasSeenHelp){
+            AlFehrestNS.LocalStorage.store("SeenHelp", true, -1);
+            AlFehrestNS.HelpEngine.start();
+        }
+    });
+
+    graph.on('doubleClick', function(event) {
+        window.clearTimeout(dblClickTimeout);
+        if(event.nodes.length) {
+            loadEntity(event.nodes[0]);
+        }
+    });
+    graph.on('hoverNode', function(event){
+        document.body.style.cursor = "pointer";
+        //neighbourhoodHighlight(event.node);
+    });
+    graph.on('blurNode', function(event){
+        document.body.style.cursor = "default";
+        //neighbourhoodHighlight();
+    });
+    graph.on('hoverEdge', function(event){
+        document.body.style.cursor = "pointer";
+        //neighbourhoodHighlight(event.node);
+    });
+    graph.on('blurEdge', function(event){
+        document.body.style.cursor = "default";
+        //neighbourhoodHighlight();
+    });
+    graph.on('click', function(event) {
+        if(event.nodes.length) {
+            window.clearTimeout(dblClickTimeout);
+            dblClickTimeout = setTimeout(function(){
+                loadDetails(event.nodes[0]);
+            }, 250);
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -74,8 +178,6 @@ document.addEventListener('DOMContentLoaded', function(){
     });
     loadEntity('tribe_4JkxGYypI6l');
     loadEntity('person_NJ0egMK1a86e');
-
-
 });
 
 
@@ -231,8 +333,7 @@ function addNodes(data) {
 function renderNewItems(nodeId, data) {
     addNodes(data);
     addLinks(data);
-    update();
-    if(nodeId) {
+    if (nodeId) {
         graph.focus(nodeId, {locked: true});
         graph.selectNodes([nodeId]);
     }
@@ -256,109 +357,6 @@ function startup() {
         }
     });
 
-
-    var container = document.getElementById('graph-container');
-
-    // create an array with nodes
-    nodes = new vis.DataSet();
-    edges = new vis.DataSet();
-
-    var data = {
-        nodes: nodes,
-        edges: edges
-    };
-    AlFehrestNS.data = data;
-
-    var options = {
-        nodes: {
-            scaling: {
-                min: 16,
-                max: 32
-            },
-            font: {
-                size: 16,
-                face: 'Droid Arabic Naskh',
-                strokeWidth: 1
-            }
-        },
-        edges: {
-            color: {
-                'color': '#aa0000',
-                'hover': '#00aa00',
-                'highlight': '#0000aa'
-            },
-            font: {
-                size: 15,
-                face: 'Droid Arabic Naskh'
-            },
-            smooth: true
-        },
-        interaction:{
-            hover:true,
-            navigationButtons: true
-        },
-        physics:{
-            barnesHut:{gravitationalConstant:-30000},
-            stabilization: {iterations:2500}
-        },
-        groups: {
-            tribe: {
-                shape: 'image',
-                image: image('tribe')
-            },
-            person: {
-                shape: 'image',
-                image: image('person')
-            },
-            prophet: {
-                shape: 'image',
-                image: image('prophet')
-            }
-        }
-    };
-    AlFehrestNS.Graph = graph = new vis.Network(container, data, options);
-
-    var dblClickTimeout = null;
-    graph.on('stabilized', function(event){
-        var hasSeenHelp = AlFehrestNS.LocalStorage.retrieve('SeenHelp');
-        if(!hasSeenHelp){
-            AlFehrestNS.LocalStorage.store("SeenHelp", true, -1);
-            AlFehrestNS.HelpEngine.start();
-        }
-    });
-
-    graph.on('doubleClick', function(event) {
-        window.clearTimeout(dblClickTimeout);
-        if(event.nodes.length) {
-            loadEntity(event.nodes[0]);
-        }
-    });
-    graph.on('hoverNode', function(event){
-        document.body.style.cursor = "pointer";
-        //neighbourhoodHighlight(event.node);
-    });
-    graph.on('blurNode', function(event){
-        document.body.style.cursor = "default";
-        //neighbourhoodHighlight();
-    });
-    graph.on('hoverEdge', function(event){
-        document.body.style.cursor = "pointer";
-        //neighbourhoodHighlight(event.node);
-    });
-    graph.on('blurEdge', function(event){
-        document.body.style.cursor = "default";
-        //neighbourhoodHighlight();
-    });
-    graph.on('click', function(event) {
-        if(event.nodes.length) {
-            window.clearTimeout(dblClickTimeout);
-            dblClickTimeout = setTimeout(function(){
-                loadDetails(event.nodes[0]);
-            }, 250);
-        }
-    });
+    restartNetwork();
 }
 
-function update() {
-
-}
