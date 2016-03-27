@@ -70,11 +70,17 @@
 	<script type="text/javascript">var AlFehrestNS = {};</script>
 
 	<!-- build:remove:dist -->
-	<script>AlFehrestNS.imagePath = "./assets/app/images/";</script>
+	<script>
+		AlFehrestNS.imagePath = "./assets/app/images/";
+		AlFehrestNS.env = "development";
+	</script>
 	<!-- /build -->
 
 	<!-- build:template:dist
-    <script>AlFehrestNS.imagePath="<%= imagePath %>";</script>
+    <script>
+    AlFehrestNS.imagePath="<%= imagePath %>";
+    AlFehrestNS.env = "production";
+    </script>
     /build -->
 
 	<!-- build:js:dist js/scripts.js -->
