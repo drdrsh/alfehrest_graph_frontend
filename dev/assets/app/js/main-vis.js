@@ -2,8 +2,6 @@ var graph = null;
 var nodes = null;
 var edges = null;
 
-function _(str){return str;}
-
 function loadDetails(id) {
 
     var $dlg = $("#details-dialog");
@@ -33,6 +31,15 @@ function loadEntity(id) {
 }
 
 function onSearchItemSelected(item) {
+    $('.search input').val('');
+    if(nodes.get(item.id)) {
+        graph.selectNodes([item.id]);
+        graph.focus(item.id, {
+            scale: 1.4,
+            animation: {duration: 250, easingFunction: "easeInOutQuart"}
+        });
+        return;
+    }
     clearNetwork();
     loadEntity(item.id);
 }
@@ -67,19 +74,10 @@ document.addEventListener('DOMContentLoaded', function(){
     });
     loadEntity('tribe_4JkxGYypI6l');
     loadEntity('person_NJ0egMK1a86e');
+
+
 });
 
-function translate(str) {
-    var lookup = {
-        'tribe.sareeh': 'تابع',
-        'tribe.root' : 'أصل'
-    };
-
-    if(!lookup[str]) {
-        return str;
-    }
-    return lookup[str];
-}
 
 function neighbourhoodHighlight(id) {
     // if something is selected:
@@ -162,11 +160,19 @@ function addLinks(data) {
     for(var idx in data.relationships) {
         for (var i = 0; i < data.relationships[idx].length; i++) {
             var rel = data.relationships[idx][i];
+            var fromNode = nodes.get(rel.firstEntityId);
+            var toNode = nodes.get(rel.secondEntityId);
+            var fromName = fromNode.name || fromNode.title;
+            var toName = toNode.name || toNode.title;
+
             rel.from = rel.firstEntityId;
             rel.to = rel.secondEntityId;
-            rel.label = translate(rel.type);
+
+            rel.label = _(rel.type);
             rel.arrows= 'to';
             rel.font = {align: 'middle'};
+            rel.title = fromName + ' ← ' + rel.label + ' ← ' + toName;
+
 
             try {
                 edges.add(rel);
@@ -227,7 +233,8 @@ function renderNewItems(nodeId, data) {
     addLinks(data);
     update();
     if(nodeId) {
-        AlFehrestNS.Graph.focus(nodeId);
+        graph.focus(nodeId, {locked: true});
+        graph.selectNodes([nodeId]);
     }
 }
 function image(name) {
@@ -265,6 +272,11 @@ function startup() {
             scaling: {
                 min: 16,
                 max: 32
+            },
+            font: {
+                size: 16,
+                face: 'Droid Arabic Naskh',
+                strokeWidth: 1
             }
         },
         edges: {
@@ -272,6 +284,10 @@ function startup() {
                 'color': '#aa0000',
                 'hover': '#00aa00',
                 'highlight': '#0000aa'
+            },
+            font: {
+                size: 15,
+                face: 'Droid Arabic Naskh'
             },
             smooth: true
         },
@@ -284,22 +300,6 @@ function startup() {
             stabilization: {iterations:2500}
         },
         groups: {
-            'switch': {
-                shape: 'triangle',
-                color: '#FF9900' // orange
-            },
-            desktop: {
-                shape: 'dot',
-                color: "#2B7CE9" // blue
-            },
-            mobile: {
-                shape: 'dot',
-                color: "#5A1E5C" // purple
-            },
-            server: {
-                shape: 'square',
-                color: "#C5000B" // red
-            },
             tribe: {
                 shape: 'image',
                 image: image('tribe')
@@ -317,6 +317,14 @@ function startup() {
     AlFehrestNS.Graph = graph = new vis.Network(container, data, options);
 
     var dblClickTimeout = null;
+    graph.on('stabilized', function(event){
+        var hasSeenHelp = AlFehrestNS.LocalStorage.retrieve('SeenHelp');
+        if(!hasSeenHelp){
+            AlFehrestNS.LocalStorage.store("SeenHelp", true, -1);
+            AlFehrestNS.HelpEngine.start();
+        }
+    });
+
     graph.on('doubleClick', function(event) {
         window.clearTimeout(dblClickTimeout);
         if(event.nodes.length) {
@@ -325,10 +333,17 @@ function startup() {
     });
     graph.on('hoverNode', function(event){
         document.body.style.cursor = "pointer";
-        console.log(event.node);
         //neighbourhoodHighlight(event.node);
     });
     graph.on('blurNode', function(event){
+        document.body.style.cursor = "default";
+        //neighbourhoodHighlight();
+    });
+    graph.on('hoverEdge', function(event){
+        document.body.style.cursor = "pointer";
+        //neighbourhoodHighlight(event.node);
+    });
+    graph.on('blurEdge', function(event){
         document.body.style.cursor = "default";
         //neighbourhoodHighlight();
     });

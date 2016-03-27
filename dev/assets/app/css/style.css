@@ -255,6 +255,13 @@ html, body {
 }
 
 
+#help-bubble p {
+	margin-top: 1.3em;
+	margin-left:5px;
+	margin-right:15px;
+
+
+}
 #help-bubble .next{
 	width:100%;
 	padding:5px;

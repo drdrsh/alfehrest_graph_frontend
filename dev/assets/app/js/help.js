@@ -35,7 +35,7 @@
         var parts = data.split('-');
         var l = parts.length;
         for(var i=0; i<l; i++) {
-            parts[i] = parts[i].replace(/\n/ig, '<br>');
+            parts[i] = $.trim(parts[i]).replace(/\n/ig, '<br>');
         }
         helpStrings = parts;
         stringsLoaded = true;
@@ -97,7 +97,7 @@
         currentBubbleParams.$bubble = $tt;
 
         if(!isInitialized) {
-            $next.html('مواصلة');
+            $next.html('حـسـنا');
             $previous.html('Previous');
             $next.click(onNext);
             $previous.click(onPrevious);
@@ -109,7 +109,7 @@
 
         $next.show();
         if(currentStep == steps.length - 1) {
-            $next.html('Close');
+            $next.html('إنهاء');
         }
 
         $previous.show();
@@ -239,6 +239,7 @@
 
 
     function step1() {
+        graph.stabilize();
         displayHelpBubble({left: 100, top: 100, text: helpStrings[0]});
     }
 
@@ -257,8 +258,8 @@
         firstNode  = nodeDS.get(nodesIds[0]);
         secondNode = nodeDS.get(nodesIds[1]);
         edge       = edgeDS.get(edgeId);
-
-        centerOnNode(firstNode.id, function() {
+        centerOnNode([firstNode.id, secondNode.id], function() {
+            graph.selectEdges([edgeId], true);
             displayHelpBubble({left: 100, top: 100, text: helpStrings[1]});
         });
     }
@@ -266,15 +267,15 @@
     function step3() {
         var str = helpStrings[2]
             .replace('$1', firstNode.name)
-            .replace('$2', edge.type)
+            .replace('$2', _(edge.type))
             .replace('$3', secondNode.name);
-        centerOnNode(firstNode.id, function(){
+        centerOnNode([firstNode.id, secondNode.id], function(){
             displayHelpBubble({left: 100, top: 100, text: str});
         });
     }
 
     function step4() {
-        centerOnNode(firstNode.id, function(){
+        centerOnNode([firstNode.id, secondNode.id], function(){
             displayHelpBubble({left: 100, top: 100, text: helpStrings[3]});
         });
     }
@@ -310,7 +311,7 @@
             });
         } else {
             AlFehrestNS.Graph.focus(node, {
-                scale: 1.5,
+                scale: 2.0,
                 animation: {duration: duration, easingFunction: "easeInOutQuart"}
             });
         }
@@ -319,9 +320,6 @@
 
     function start() {
         isHelpRunning = true;
-        if($('#menu .open').length != 0){
-            $('#menu').click();
-        }
         currentStep = -1;
         next();
     }

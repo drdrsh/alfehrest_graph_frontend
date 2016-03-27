@@ -32,7 +32,10 @@ AlFehrestNS.SearchManager = (function(){
                 if (ui.content.length === 0) {
                     $(".ui-autocomplete").addClass('no-results');
                     ui.content.push({
-                        cb   : function (){return false;},
+                        cb   : function (){
+                            mDomInput.val('');
+                            return false;
+                        },
                         id   : null,
                         label: _('no_results'),
                         value: _('no_results'),

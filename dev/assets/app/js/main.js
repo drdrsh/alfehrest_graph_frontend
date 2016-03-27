@@ -14,10 +14,6 @@ $('.share').click(function(event) {
     );
 });
 
-$('#menu').click(function(){
-    $('#top-panel').toggleClass("is-slid");
-    $('#menu a').toggleClass("open");
-});
 
 $( ".about" ).click(function() {
     $('#about-dialog').dialog('open');
@@ -28,7 +24,6 @@ $( ".help" ).click(function() {
     AlFehrestNS.HelpEngine.start();
 });
 
-
 $('#about-dialog').dialog({
     autoOpen: false,
     modal: true,
@@ -36,18 +31,13 @@ $('#about-dialog').dialog({
     maxHeight: 500,
     width: 600,
     height: 500,
-    title: "Visualization of artificial neural networks",
+    title: "نموذج تفاعلي لأنساب العرب في السيرة النبوية",
     buttons: {
-        "Take a tour" : function() {
-            $('.help').click()
+        "العودة" : function() {
             $('#about-dialog').dialog('close');
-        },
-        "Build your own Network" : function() {
-            $('#about-dialog').dialog('close');
-            if($('#menu .open').length == 0){
-                $('#menu').click();
-            }
         }
     }
 });
-$('#about-dialog').dialog('open');
+
+
+
