@@ -331,20 +331,30 @@ html, body {
 	left:15px;
 }
 
-#lower-left-pane a.share img {
+a.share {
 	transition-property: transform;
 	transition-duration: 0.3s;
 	transform: translate3d(0, 0, 0);
 	width: 35px;
+	height:35px;
 	padding: 3px;
 	border: 0;
-	display: inline;
+	display: block;
+	float:left;
+	margin-left:10px;
+	background-size:contain;
 }
 
-#lower-left-pane a.share img:hover {
+a.share:hover {
 	transform: translate3d(0, -7px, 0);
 }
-
+a.share.google   {  background-image: url('../images/google.png');  }
+a.share.facebook {  background-image: url('../images/facebook.png');  }
+a.share.twitter  {  background-image: url('../images/twitter.png');  }
+/*
+	<img src="./assets/app/images/google.png" alt="Google" />
+				<img src="./assets/app/images/twitter.png" alt="Twitter" />
+			*/
 #top-left-pane .search {
 	width: 210px;
 	margin-left:20px;

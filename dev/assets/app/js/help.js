@@ -1,6 +1,8 @@
 (function(){
     "use strict";
     var customStyleEl = null;
+    var helpStrings = [];
+
     function addStylesheetRules(rawRules) {
 
         if(customStyleEl) {
@@ -28,18 +30,8 @@
         return result;
     }
 
-    var stringsLoaded = false;
     var currentBubbleParams = null;
-    var helpStrings = [];
-    $.ajax('./assets/app/language/help.ar.txt').then(function(data) {
-        var parts = data.split('-');
-        var l = parts.length;
-        for(var i=0; i<l; i++) {
-            parts[i] = $.trim(parts[i]).replace(/\n/ig, '<br>');
-        }
-        helpStrings = parts;
-        stringsLoaded = true;
-    });
+
 
     var isHelpRunning = false;
     var currentStep = 0;
@@ -320,6 +312,8 @@
 
     function start() {
         isHelpRunning = true;
+        helpStrings = _('help_steps');
+
         currentStep = -1;
         next();
     }

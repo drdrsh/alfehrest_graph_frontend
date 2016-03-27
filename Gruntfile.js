@@ -2,6 +2,44 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        replace: {
+            dist: {
+                src: ['dist/style/style.css'],
+                overwrite: true,
+                replacements: [{
+                    from: /\burl\([^)]+\)/gi,
+                    to: function(x, y, z) {
+                        var urlRegEx = /\((.*)\)/gi;
+                        var parts = urlRegEx.exec(x);
+                        if(parts.length != 2) {
+                            return x;
+                        }
+                        var image = parts[1].replace(/"|'/ig, '');
+                        var imlc = image.toLowerCase();
+                        if(imlc.startsWith('http:') || imlc.startsWith('data:')) {
+                            return x;
+                        }
+                        var imageBaseName = image.split('/').pop();
+                        return 'url("../images/' + imageBaseName + '")';
+                    }
+                }]
+            }
+        },
+        copy: {
+            'dist': {
+                files: [
+                    // flattens results to a single level
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['dev/**/*.png', 'dev/**/*.gif', 'dev/**/*.svg', 'dev/**/*.jpg'],
+                        dest: 'dist/images',
+                        filter: 'isFile'
+                    }
+                ]
+            }
+        },
+
 		serve: {
 			options: {
 				port: 9000,
@@ -13,11 +51,70 @@ module.exports = function(grunt) {
 
         "bower-install-simple": {
             options: {color: true},
-            "prod": {options: {production: true}},
+            "dist": {options: {production: true}},
             "dev":  {options: {production: false}}
         },
 
+        cssmin: {
+            options: {
+                shorthandCompacting: false,
+                roundingPrecision: -1,
+                processImport: false
+            },
+            dist: {
+                files: {
+                    'dist/style/style.css': ['dist/style/style.css']
+                }
+            }
+        },
+
+        processhtml: {
+            options: {
+                data: {
+                    imagePath: './images/'
+                }
+            },
+            dist: {
+                files: {
+                    'dist/index.html': ['dev/index.html']
+                }
+            }
+        },
+
+        concat_css: {
+            options: {
+                // Task-specific options go here.
+            },
+            dist: {
+                dest : 'dist/style/style.css',
+                src  : ['dev/assets/lib/vis/vis.css',
+                    'dev/assets/lib/jquery-ui/jquery-ui.css',
+                    'dev/assets/app/css/style.css'
+                ],
+            }
+        },
+
         concat: {
+            "dist" : {
+                options: {},
+                files : {
+                    'dist/js/scripts.js': [
+                        "dev/assets/lib/jquery/jquery.js",
+                        "dev/assets/lib/jquery-ui/jquery-ui.js",
+                        "dev/assets/lib/vis/vis.js",
+                        "dev/assets/app/js/language.js",
+                        "dev/assets/app/language/ar.js",
+                        "dev/assets/app/js/SearchManager.js",
+                        "dev/assets/app/js/LocalStorage.js",
+                        "dev/assets/app/js/main.js",
+                        "dev/assets/app/js/help.js",
+                        "dev/assets/app/js/main-req.js",
+                        "dev/assets/app/js/config.js",
+                        "dev/assets/app/js/template.js",
+                        "dev/assets/app/js/main-vis.js"
+                    ]
+                }
+            },
             "dev": {
                 "jquery-ui": {
                     options: {
@@ -40,9 +137,15 @@ module.exports = function(grunt) {
             }
         },
 
+
         uglify: {
-            options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+            "dist" : {
+                options: {
+                    banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                },
+                files: {
+                    'dist/js/scripts.js': ['dist/js/scripts.js']
+                }
             }
         },
 
@@ -77,18 +180,32 @@ module.exports = function(grunt) {
                 target: ['dev/*.html']
             }
         }
-
     });
 
-    grunt.loadNpmTasks('grunt-bower-install-simple')
+    grunt.loadNpmTasks('grunt-bower-install-simple');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-expand-in-place');
     grunt.loadNpmTasks('grunt-bowercopy');
-	grunt.loadNpmTasks('grunt-serve');
+    grunt.loadNpmTasks('grunt-processhtml');
+    grunt.loadNpmTasks('grunt-text-replace');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-concat-css');
+    grunt.loadNpmTasks('grunt-serve');
     
     // task setup 
-    grunt.registerTask('dev', ['bower-install-simple:dev', 'concat:dev', 'bowercopy:dev', 'expand-in-place:dev', 'serve']);
+    grunt.registerTask('dev', ['bower-install-simple:dev', 'concat:dev', 'bowercopy:dev', 'expand-in-place:dev']);
+    grunt.registerTask('dist', [
+        'dev',
+        'copy:dist',
+        'concat:dist',
+        'concat_css:dist',
+        'replace:dist',
+        'uglify:dist',
+        'cssmin:dist',
+        'processhtml:dist'
+    ]);
     grunt.registerTask('default', ['dev']);
 };

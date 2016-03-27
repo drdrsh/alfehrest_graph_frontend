@@ -237,9 +237,11 @@ function renderNewItems(nodeId, data) {
         graph.selectNodes([nodeId]);
     }
 }
+
 function image(name) {
-    return './assets/app/images/' + name + '.png';
+    return AlFehrestNS.imagePath + name + '.png';
 }
+
 function startup() {
 
     $( "#details-dialog" ).dialog({

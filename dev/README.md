@@ -9,9 +9,16 @@ You will need to have [NodeJS](http://nodejs.org), [npm](http://npmjs.com), [gru
 git clone https://github.com/drdrsh/alfehrest_graph_frontend.git .
 npm install
 grunt dev
+grunt serve
 ```
 
 And navigate to [http://localhost:9000/index.html](http://localhost:9000/index.html)
+
+To generate distribution files run
+```shell
+grunt dist
+```
+
 
 You will also need to have the server up and running with sample data. For more details please
 refer to [NodeJS AlFehrest Graph Server](https://github.com/drdrsh/alfehrest_nodejs)
@@ -23,7 +30,6 @@ file at
 ./dev/assets/app/js/config.js
 ```
 
-
 ### Some background
 
-This demo is currently based on cytoscape and cola, I am still experimenting with graph libraries.
+This demo is based on [visjs](http://visjs.org).
