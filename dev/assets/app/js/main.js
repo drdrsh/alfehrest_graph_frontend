@@ -28,9 +28,9 @@ $('#about-dialog').dialog({
     autoOpen: false,
     modal: true,
     maxWidth:600,
-    maxHeight: 500,
+    maxHeight: 300,
     width: 600,
-    height: 500,
+    height: 300,
     title: "نموذج تفاعلي لأنساب العرب في السيرة النبوية",
     buttons: {
         "العودة" : function() {

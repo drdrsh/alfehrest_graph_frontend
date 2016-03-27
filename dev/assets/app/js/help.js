@@ -97,7 +97,7 @@
         currentBubbleParams.$bubble = $tt;
 
         if(!isInitialized) {
-            $next.html('حـسـنا');
+            $next.html('حَـسَـنٌ');
             $previous.html('Previous');
             $next.click(onNext);
             $previous.click(onPrevious);
@@ -109,7 +109,7 @@
 
         $next.show();
         if(currentStep == steps.length - 1) {
-            $next.html('إنهاء');
+            $next.html('إِنْهَاء');
         }
 
         $previous.show();
