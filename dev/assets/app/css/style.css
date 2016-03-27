@@ -298,8 +298,7 @@ html, body {
 }
 
 
-#top-left-pane .help,
-#top-left-pane .about {
+#top-left-pane .pane-button {
 	transition-property: transform;
 	transition-duration: 0.3s;
 	transform: translate3d(0, 0, 0);
@@ -313,14 +312,13 @@ html, body {
 
 #top-left-pane .about {
 	background-image: url("../images/info.png");
-	margin-right:20px;
 }
 
-#top-left-pane .help:hover {
-	transform: translate3d(0, -7px, 0);
+#top-left-pane .restart {
+	background-image: url("../images/restart.png");
 }
 
-#top-left-pane .about:hover {
+#top-left-pane .pane-button:hover {
 	transform: translate3d(0, -7px, 0);
 }
 
@@ -357,8 +355,8 @@ a.share.twitter  {  background-image: url('../images/twitter.png');  }
 			*/
 #top-left-pane .search {
 	width: 210px;
-	margin-left:20px;
-	margin-top:15px;
+	margin-left:30px;
+	margin-top:18px;
 	font-size:130%;
 	font-weight:bold;
 }

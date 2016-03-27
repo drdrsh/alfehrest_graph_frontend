@@ -1,6 +1,7 @@
 var graph = null;
 var nodes = null;
 var edges = null;
+var prophetId = null;
 
 function loadDetails(id) {
 
@@ -154,6 +155,9 @@ function restartNetwork() {
 }
 
 document.addEventListener('DOMContentLoaded', function(){
+
+    prophetId = AlFehrestNS.cfg('prophetId');
+
     startup();
     getEntityList().then(function(a, b){
         var records = [];
@@ -176,8 +180,8 @@ document.addEventListener('DOMContentLoaded', function(){
         AlFehrestNS.SearchManager.register(data);
         
     });
-    loadEntity('tribe_4JkxGYypI6l');
-    loadEntity('person_NJ0egMK1a86e');
+    //loadEntity('tribe_4JkxGYypI6l');
+    loadEntity(prophetId);
 });
 
 
@@ -295,7 +299,7 @@ function addNodes(data) {
     mainEntity.nodeType = 'entity';
 
     mainEntity.group = mainEntity._entity_type;
-    if(mainEntityId == 'person_NJ0egMK1a86e') {
+    if(mainEntityId == prophetId) {
         mainEntity.group = 'prophet';
     }
     mainEntity.label = mainEntity.name || mainEntity.title;
@@ -315,7 +319,7 @@ function addNodes(data) {
             e.nodeType = 'entity';
             e.loaded = false;
             e.group = type;
-            if(id == 'person_NJ0egMK1a86e') {
+            if(id == prophetId) {
                 e.group = 'prophet';
             }
             e.label = e.name || e.title;

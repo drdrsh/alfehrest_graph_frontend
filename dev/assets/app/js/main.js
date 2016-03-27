@@ -24,6 +24,18 @@ $( ".help" ).click(function() {
     AlFehrestNS.HelpEngine.start();
 });
 
+var canRestart = true;
+$( ".restart" ).click(function() {
+    if(canRestart){
+        restartNetwork();
+        loadEntity(AlFehrestNS.cfg('prophetId'));
+        canRestart = false;
+        setTimeout(function() {
+            canRestart = true;
+        }, 2000);
+    }
+});
+
 $('#about-dialog').dialog({
     autoOpen: false,
     modal: true,
@@ -38,6 +50,3 @@ $('#about-dialog').dialog({
         }
     }
 });
-
-
-
