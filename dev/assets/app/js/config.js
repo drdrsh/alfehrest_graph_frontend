@@ -2,12 +2,12 @@ AlFehrestNS.cfg = function(key) {
 
     var config = {
         'production' : {
-            'url' : 'http://alfehrest.org/nodejs/',
-            'prophetId' : 'person_NJ0egMK1a86e'
+            'url' : 'http://api.alfehrest.org/seera',
+            'prophetId' : 'person_241d581b957d9'
         },
         'development' :{
-            'url' : 'http://localhost:8080/api/',
-            'prophetId' : 'person_N1vLYXWCe'
+            'url' : 'http://localhost:5000/api/',
+            'prophetId' : 'person_241d581b957d9'
         }
     };
 
